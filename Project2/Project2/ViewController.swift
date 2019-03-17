@@ -16,6 +16,8 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
+    var questionsAsked = 0
+    let maxNumberOfQuestions = 10
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +36,14 @@ class ViewController: UIViewController {
     }
 
     func askQuestion(action: UIAlertAction! = nil) {
+        navigationItem.prompt = "Score: \(score)"
+        
+        questionsAsked += 1
+        guard questionsAsked <= maxNumberOfQuestions else {
+            showFinalScore()
+            return
+        }
+        
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
         
@@ -48,10 +58,10 @@ class ViewController: UIViewController {
         var title: String
         
         if sender.tag == correctAnswer {
-            title = "Correct"
+            title = "Correct!"
             score += 1
         } else {
-            title = "Wrong"
+            title = "Wrong! That's the flag of \(countries[sender.tag].uppercased())"
             score -= 1
         }
         
@@ -60,6 +70,15 @@ class ViewController: UIViewController {
         present(ac, animated: true)
     }
     
+    func showFinalScore() {
+        button1.isEnabled = false
+        button2.isEnabled = false
+        button3.isEnabled = false
+        
+        let ac = UIAlertController(title: "Congratulations!", message: "Your final score is \(score).", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
 
 }
 
