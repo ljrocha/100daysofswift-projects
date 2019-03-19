@@ -57,7 +57,7 @@ class ViewController: UITableViewController {
     }
     
     @objc func shareTapped() {
-        let items = ["You should checkout this app!"]
+        let items: [Any] = ["You should checkout this app!", URL(string: "https://www.apple.com")!]
         let vc = UIActivityViewController(activityItems: items, applicationActivities: [])
         vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(vc, animated: true)
