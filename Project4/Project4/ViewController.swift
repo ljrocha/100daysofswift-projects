@@ -11,10 +11,10 @@ import WebKit
 
 class ViewController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
-    var progressView: UIProgressView!
     var websites: [String]!
     var websiteSelected = 0
     
+    var progressView: UIProgressView!
     var backButtonItem: UIBarButtonItem!
     var forwardButtonItem: UIBarButtonItem!
     
@@ -30,6 +30,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
         
+        // Set up toolbar button items
         progressView = UIProgressView(progressViewStyle: .default)
         progressView.sizeToFit()
         let progressButton = UIBarButtonItem(customView: progressView)
@@ -45,11 +46,12 @@ class ViewController: UIViewController, WKNavigationDelegate {
         toolbarItems = [progressButton, spacer, backButtonItem, spacer, forwardButtonItem, spacer, refresh]
         navigationController?.isToolbarHidden = false
         
+        // Add keyPath observers
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
-        
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoBack), options: .new, context: nil)
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoForward), options: .new, context: nil)
         
+        // Load selected website
         let url = URL(string: "https://" + websites[websiteSelected])!
         webView.load(URLRequest(url: url))
         webView.allowsBackForwardNavigationGestures = true
