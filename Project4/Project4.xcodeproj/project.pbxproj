@@ -12,6 +12,7 @@
 		462C674522434E770005758E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 462C674322434E770005758E /* Main.storyboard */; };
 		462C674722434E780005758E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 462C674622434E780005758E /* Assets.xcassets */; };
 		462C674A22434E780005758E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 462C674822434E780005758E /* LaunchScreen.storyboard */; };
+		4683EE132245F1330007DE7E /* SitesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4683EE122245F1330007DE7E /* SitesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		462C674622434E780005758E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		462C674922434E780005758E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		462C674B22434E780005758E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4683EE122245F1330007DE7E /* SitesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SitesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				462C673F22434E770005758E /* AppDelegate.swift */,
 				462C674122434E770005758E /* ViewController.swift */,
+				4683EE122245F1330007DE7E /* SitesViewController.swift */,
 				462C674322434E770005758E /* Main.storyboard */,
 				462C674622434E780005758E /* Assets.xcassets */,
 				462C674822434E780005758E /* LaunchScreen.storyboard */,
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				462C674222434E770005758E /* ViewController.swift in Sources */,
+				4683EE132245F1330007DE7E /* SitesViewController.swift in Sources */,
 				462C674022434E770005758E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
