@@ -10,13 +10,25 @@ import UIKit
 
 class SitesViewController: UITableViewController {
 
-    var websites = ["apple.com", "hackingwithswift.com"]
+    var websites = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Websites"
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        if let startWebsitesURL = Bundle.main.url(forResource: "websites", withExtension: "txt") {
+            if let startWebsites = try? String(contentsOf: startWebsitesURL) {
+                websites = startWebsites.components(separatedBy: "\n")
+            }
+        }
+        
+        if websites.isEmpty {
+            websites = ["swiftbysundell.com"]
+        } else {
+            let _ = websites.popLast()
+        }
     }
 
     // MARK: - Table view data source
