@@ -16,14 +16,15 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(creditsTapped))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(filterTapped))
+        
         performSelector(inBackground: #selector(fetchJSON), with: nil)
     }
     
     @objc func fetchJSON() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(creditsTapped))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(filterTapped))
-        
         let urlString: String
+        
         if navigationController?.tabBarItem.tag == 0 {
             urlString = "https://www.hackingwithswift.com/samples/petitions-1.json"
         } else {
