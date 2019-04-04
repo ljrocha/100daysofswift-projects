@@ -20,14 +20,13 @@ class SitesViewController: UITableViewController {
         
         if let startWebsitesURL = Bundle.main.url(forResource: "websites", withExtension: "txt") {
             if let startWebsites = try? String(contentsOf: startWebsitesURL) {
-                websites = startWebsites.components(separatedBy: "\n")
+                let trimmedStartWebsites = startWebsites.trimmingCharacters(in: .whitespacesAndNewlines)
+                websites = trimmedStartWebsites.components(separatedBy: "\n")
             }
         }
         
         if websites.isEmpty {
             websites = ["swiftbysundell.com"]
-        } else {
-            let _ = websites.popLast()
         }
     }
 
