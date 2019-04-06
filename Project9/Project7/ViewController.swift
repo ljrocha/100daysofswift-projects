@@ -79,15 +79,21 @@ class ViewController: UITableViewController {
     }
     
     func filter(by text: String) {
-        if text.isEmpty {
-            filteredPetitions = petitions
-        } else {
-            let lowerText = text.lowercased()
-            filteredPetitions = petitions.filter { petition in
-                return petition.title.lowercased().contains(lowerText) || petition.body.lowercased().contains(lowerText)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            if text.isEmpty {
+                self.filteredPetitions = self.petitions
+            } else {
+                let lowerText = text.lowercased()
+                self.filteredPetitions = self.petitions.filter { petition in
+                    return petition.title.lowercased().contains(lowerText) || petition.body.lowercased().contains(lowerText)
+                }
+            }
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
             }
         }
-        tableView.reloadData()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
