@@ -44,6 +44,27 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let person = people[indexPath.item]
         
+        let ac = UIAlertController(title: "Would you like to rename or delete \(person.name)?", message: nil, preferredStyle: .actionSheet)
+        ac.popoverPresentationController?.sourceView = collectionView.cellForItem(at: indexPath)
+        
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        ac.addAction(UIAlertAction(title: "Rename", style: .default) { [weak self] _ in
+            self?.renamePerson(at: indexPath.item)
+        })
+        
+        ac.addAction(UIAlertAction(title: "Delete", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.people.remove(at: indexPath.item)
+            self.collectionView.reloadData()
+        })
+        
+        present(ac, animated: true)
+    }
+    
+    func renamePerson(at index: Int) {
+        let person = people[index]
+        
         let ac = UIAlertController(title: "Rename \(person.name)", message: nil, preferredStyle: .alert)
         ac.addTextField()
         
@@ -55,14 +76,15 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
             self?.collectionView.reloadData()
         })
         
-
-        
         present(ac, animated: true)
-        
+
     }
     
     @objc func addNewPerson() {
         let picker = UIImagePickerController()
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            picker.sourceType = .camera
+        }
         picker.allowsEditing = true
         picker.delegate = self
         present(picker, animated: true)
