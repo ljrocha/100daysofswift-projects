@@ -77,7 +77,20 @@ class ViewController: UIViewController {
         button2.isEnabled = false
         button3.isEnabled = false
         
-        let ac = UIAlertController(title: "Congratulations!", message: "Your final score is \(score).", preferredStyle: .alert)
+        let defaults = UserDefaults.standard
+        let hasPlayedBefore = defaults.bool(forKey: "PlayedBefore")
+        let highestScore = defaults.integer(forKey: "HighScore")
+        
+        var title = "Congratulations!"
+        if !hasPlayedBefore {
+            defaults.set(score, forKey: "HighScore")
+            defaults.set(true, forKey: "PlayedBefore")
+        } else if score > highestScore {
+            defaults.set(score, forKey: "HighScore")
+            title += " You have a new high score!"
+        }
+        
+        let ac = UIAlertController(title: title, message: "Your score is \(score).", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
     }
