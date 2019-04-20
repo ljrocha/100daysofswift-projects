@@ -13,11 +13,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var intensity: UISlider!
+    @IBOutlet var radius: UISlider!
+    @IBOutlet var scale: UISlider!
+    @IBOutlet var changeFilterButton: UIButton!
     
     var currentImage: UIImage!
     
     var context: CIContext!
-    var currentFilter: CIFilter!
+    var currentFilter: CIFilter! {
+        didSet {
+            changeFilterButton.setTitle(currentFilter.name, for: .normal)
+            updateSliders()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,12 +57,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @IBAction func save(_ sender: UIButton) {
-        guard let image = imageView.image else { return }
+        guard let image = imageView.image else {
+            let ac = UIAlertController(title: "No image selected", message: "Please select an image", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+            return
+        }
         
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
     }
     
-    @IBAction func intensityChanged(_ sender: UISlider) {
+    @IBAction func inputKeyValueChanged(_ sender: UISlider) {
         applyProcessing()
     }
     
@@ -97,11 +110,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         
         if inputKeys.contains(kCIInputRadiusKey) {
-            currentFilter.setValue(intensity.value * 200, forKey: kCIInputRadiusKey)
+            currentFilter.setValue(radius.value * 200, forKey: kCIInputRadiusKey)
         }
         
         if inputKeys.contains(kCIInputScaleKey) {
-            currentFilter.setValue(intensity.value * 10, forKey: kCIInputScaleKey)
+            currentFilter.setValue(scale.value * 10, forKey: kCIInputScaleKey)
         }
         
         if inputKeys.contains(kCIInputCenterKey) {
@@ -126,6 +139,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
         
         applyProcessing()
+    }
+    
+    func updateSliders() {
+        let inputKeys = currentFilter.inputKeys
+        
+        intensity.isEnabled = inputKeys.contains(kCIInputIntensityKey)
+        radius.isEnabled = inputKeys.contains(kCIInputRadiusKey)
+        scale.isEnabled = inputKeys.contains(kCIInputScaleKey)
     }
 }
 
