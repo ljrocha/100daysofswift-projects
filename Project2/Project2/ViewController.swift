@@ -54,10 +54,20 @@ class ViewController: UIViewController {
         button3.setImage(UIImage(named: countries[2]), for: .normal)
         
         title = countries[correctAnswer].uppercased()
+        
+        UIView.animate(withDuration: 0.5) {
+            self.button1.transform = .identity
+            self.button2.transform = .identity
+            self.button3.transform = .identity
+        }
     }
     
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String
+        
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, options: [], animations: {
+            sender.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
+        })
         
         if sender.tag == correctAnswer {
             title = "Correct!"
