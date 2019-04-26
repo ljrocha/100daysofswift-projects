@@ -1,0 +1,23 @@
+[
+    {
+        "name": "United States",
+        "capital": "Washington, D.C.",
+        "size": 3796742,
+        "estimatedPopulation": 327167434,
+        "currency": "United States dollar"
+    },
+    {
+        "name": "Mexico",
+        "capital": "Mexico City",
+        "size": 1972550,
+        "estimatedPopulation": 126577691,
+        "currency": "Peso"
+    },
+    {
+		"name": "Canada",
+		"capital": "Ottawa",
+		"size": 9984670,
+		"estimatedPopulation": 37314442,
+		"currency": "Canadian dollar"
+	}
+]
