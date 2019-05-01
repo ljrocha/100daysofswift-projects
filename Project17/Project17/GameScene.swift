@@ -24,6 +24,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    var allowPlayerMovement = true
+    
+    var enemiesCreated = 0
+    var enemyTimeInterval: TimeInterval = 1
+    
     override func didMove(to view: SKView) {
         backgroundColor = .black
         
@@ -49,7 +54,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = .zero
         physicsWorld.contactDelegate = self
         
-        gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: enemyTimeInterval, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
     }
     
     @objc func createEnemy() {
@@ -65,6 +70,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sprite.physicsBody?.angularVelocity = 5
         sprite.physicsBody?.linearDamping = 0
         sprite.physicsBody?.angularDamping = 0
+        
+        enemiesCreated += 1
+        if enemiesCreated.isMultiple(of: 20) {
+            enemyTimeInterval -= 0.1
+            gameTimer?.invalidate()
+            gameTimer = Timer.scheduledTimer(timeInterval: enemyTimeInterval, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        }
     }
     
     
@@ -80,7 +92,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        
+        let location = touch.location(in: self)
+        
+        let dx = abs(location.x - player.position.x)
+        let dy = abs(location.y - player.position.y)
+        
+        allowPlayerMovement = dx <= 44 && dy <= 44
+    }
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard allowPlayerMovement else { return }
+        
         guard let touch = touches.first else { return }
         
         var location = touch.location(in: self)
@@ -102,5 +127,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.removeFromParent()
         
         isGameOver = true
+        gameTimer?.invalidate()
     }
 }
