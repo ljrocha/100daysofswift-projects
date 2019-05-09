@@ -9,21 +9,44 @@
 import UIKit
 import MobileCoreServices
 
-class ActionViewController: UIViewController {
+class ActionViewController: UIViewController, ScriptPickerViewControllerDelegate {
 
     @IBOutlet var script: UITextView!
 
     var pageTitle = ""
     var pageURL = ""
     
+    var userScripts = [JSCode]()
+    let key = "userScripts"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sample", style: .plain, target: self, action: #selector(sampleScripts))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+        
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let customButtonItem = UIBarButtonItem(title: "My Scripts", style: .plain, target: self, action: #selector(customScripts))
+        let saveButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveScript))
+        toolbarItems = [customButtonItem, spacer, saveButtonItem]
+        navigationController?.isToolbarHidden = false
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
+        
+        // Load custom scripts
+        let defaults = UserDefaults.standard
+        if let savedScripts = defaults.object(forKey: key) as? Data {
+            let jsonDecoder = JSONDecoder()
+            
+            do {
+                userScripts = try jsonDecoder.decode([JSCode].self, from: savedScripts)
+            } catch {
+                print("Failed to load custom scripts")
+            }
+        }
         
         if let inputItem = extensionContext?.inputItems.first as? NSExtensionItem {
             if let itemProvider = inputItem.attachments?.first {
@@ -41,7 +64,49 @@ class ActionViewController: UIViewController {
             }
         }
     }
-
+    
+    @objc func sampleScripts() {
+        let ac = UIAlertController(title: "Select a prewritten script...", message: nil, preferredStyle: .actionSheet)
+        
+        ac.addAction(UIAlertAction(title: "Alert", style: .default) { [weak self] _ in
+            self?.script.text = "alert(document.title);"
+        })
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        ac.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
+        present(ac, animated: true)
+    }
+    
+    @objc func customScripts() {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "ScriptPicker") as? ScriptPickerViewController {
+            vc.userScripts = userScripts
+            vc.delegate = self
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
+    @objc func saveScript() {
+        let ac = UIAlertController(title: "Type a name for the script...", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak ac] _ in
+            guard let self = self else { return }
+            guard let scriptName = ac?.textFields?[0].text else { return }
+            
+            let jsCode = JSCode(name: scriptName, script: self.script.text)
+            self.userScripts.append(jsCode)
+            
+            let jsonEncoder = JSONEncoder()
+            if let savedData = try? jsonEncoder.encode(self.userScripts) {
+                let defaults = UserDefaults.standard
+                defaults.set(savedData, forKey: self.key)
+            }
+        })
+        
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        present(ac, animated: true)
+    }
+    
     @IBAction func done() {
         let item = NSExtensionItem()
         let argument: NSDictionary = ["customJavaScript": script.text]
@@ -66,6 +131,12 @@ class ActionViewController: UIViewController {
         
         let selectedRange = script.selectedRange
         script.scrollRangeToVisible(selectedRange)
+    }
+
+    // MARK: - ScriptPickerViewControllerDelegate
+    func scriptPicker(_ controller: ScriptPickerViewController, didPick script: JSCode) {
+        self.script.text = script.script
+        navigationController?.popViewController(animated: true)
     }
 
 }
