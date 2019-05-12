@@ -30,7 +30,7 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    @objc func scheduleLocal() {
+    @objc func scheduleLocal(reminder: Bool = false) {
         registerCategories()
         
         let center = UNUserNotificationCenter.current()
@@ -43,11 +43,13 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         content.userInfo = ["customData": "fizzbuzz"]
         content.sound = .default
         
+        
+        let timeInterval: TimeInterval = reminder ? 86400 : 5
         var dateComponents = DateComponents()
         dateComponents.hour = 10
         dateComponents.minute = 30
 //        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         center.add(request)
@@ -58,7 +60,8 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         center.delegate = self
         
         let show = UNNotificationAction(identifier: "show", title: "Tell me more...", options: .foreground)
-        let category = UNNotificationCategory(identifier: "alarm", actions: [show], intentIdentifiers: [], options: [])
+        let reminder = UNNotificationAction(identifier: "reminder", title: "Remind me later", options: .foreground)
+        let category = UNNotificationCategory(identifier: "alarm", actions: [show, reminder], intentIdentifiers: [], options: [])
         
         center.setNotificationCategories([category])
     }
@@ -69,15 +72,27 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         if let customData = userInfo["customData"] as? String {
             print("Custom data received: \(customData)")
             
+            let action: String
             switch response.actionIdentifier {
             case UNNotificationDefaultActionIdentifier:
                 // the user swiped to unlock
                 print("Default identifier")
+                action = "Default action"
             case "show":
                 print("Show more information...")
+                action = "Show action"
+            case "reminder":
+                print("Remind me later")
+                scheduleLocal(reminder: true)
+                action = "Reminder action"
             default:
+                action = "Unknown action"
                 break
             }
+            
+            let ac = UIAlertController(title: action, message: nil, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
         }
         
         // We must call the completion handler when we're done
