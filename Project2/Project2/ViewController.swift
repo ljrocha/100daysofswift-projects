@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import UserNotifications
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UNUserNotificationCenterDelegate {
     @IBOutlet var button1: UIButton!
     @IBOutlet var button2: UIButton!
     @IBOutlet var button3: UIButton!
@@ -25,6 +26,8 @@ class ViewController: UIViewController {
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Score", style: .plain, target: self, action: #selector(showScore))
+        
+        registerLocal()
         
         button1.layer.borderWidth = 1
         button2.layer.borderWidth = 1
@@ -110,6 +113,64 @@ class ViewController: UIViewController {
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
     }
+    
+    func registerLocal() {
+        let center = UNUserNotificationCenter.current()
+        
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, error in
+            if granted {
+                print("Granted local notifications permission")
+                self?.scheduleLocal()
+            } else {
+                print("Denied local notifications permission")
+            }
+        }
+    }
+    
+    func scheduleLocal() {
+        registerCategories()
+        
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+        
+        let highScore = UserDefaults.standard.integer(forKey: "HighScore")
+        let content = UNMutableNotificationContent()
+        content.title = "Can you beat your previous high score of \(highScore)?"
+        content.body = "Test your knowledge of country flags while earning points!"
+        content.categoryIdentifier = "return"
+        content.sound = .default
+        
+        let calendar = Calendar.current
+        let dateComponents = calendar.dateComponents([.hour, .minute], from: Date())
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        center.add(request)
+    }
+    
+    func registerCategories() {
+        let center = UNUserNotificationCenter.current()
+        center.delegate = self
+        
+        let play = UNNotificationAction(identifier: "play", title: "Play!", options: .foreground)
+        let category = UNNotificationCategory(identifier: "return", actions: [play], intentIdentifiers: [], options: [])
+        
+        center.setNotificationCategories([category])
+    }
 
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        switch response.actionIdentifier {
+        case UNNotificationDefaultActionIdentifier:
+            print("Default identifier")
+        case "play":
+            let ac = UIAlertController(title: "Welcome back!", message: "Can you set a new record?", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Yes!", style: .default) { [weak self] _ in
+                self?.scheduleLocal()
+            })
+            present(ac, animated: true)
+        default:
+            break
+        }
+    }
 }
 
