@@ -18,22 +18,42 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pn9-P3-gtb">
-                                <rect key="frame" x="162.5" y="424" width="89" height="48"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UNKNOWN" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pn9-P3-gtb">
+                                <rect key="frame" x="111" y="424" width="192" height="48"/>
                                 <fontDescription key="fontDescription" type="system" weight="thin" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Region: Unknown" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6AQ-Ri-SHG">
+                                <rect key="frame" x="140" y="480" width="134" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8rI-pV-YqN">
+                                <rect key="frame" x="79" y="509" width="256" height="256"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="256" id="QE4-YW-908"/>
+                                    <constraint firstAttribute="width" constant="256" id="k0k-7J-NTD"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Pn9-P3-gtb" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="A3f-zf-wH2"/>
-                            <constraint firstItem="Pn9-P3-gtb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="hk4-x6-dXz"/>
+                            <constraint firstItem="6AQ-Ri-SHG" firstAttribute="top" secondItem="Pn9-P3-gtb" secondAttribute="bottom" constant="8" id="EAz-rp-CPv"/>
+                            <constraint firstItem="8rI-pV-YqN" firstAttribute="centerX" secondItem="6AQ-Ri-SHG" secondAttribute="centerX" id="EW2-0O-sJk"/>
+                            <constraint firstItem="Pn9-P3-gtb" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Gqv-gw-FuI"/>
+                            <constraint firstItem="Pn9-P3-gtb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="e6u-R6-IQf"/>
+                            <constraint firstItem="6AQ-Ri-SHG" firstAttribute="centerX" secondItem="Pn9-P3-gtb" secondAttribute="centerX" id="sdT-qp-MkN"/>
+                            <constraint firstItem="8rI-pV-YqN" firstAttribute="top" secondItem="6AQ-Ri-SHG" secondAttribute="bottom" constant="8" id="wUA-EJ-uBG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="circleView" destination="8rI-pV-YqN" id="ByS-yv-FQs"/>
                         <outlet property="distanceReading" destination="Pn9-P3-gtb" id="Ody-CE-95I"/>
+                        <outlet property="regionReading" destination="6AQ-Ri-SHG" id="fOy-7D-afV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
