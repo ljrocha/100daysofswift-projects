@@ -46,6 +46,12 @@ class GameScene: SKScene {
     
     var isGameEnded = false
     
+    let startingYPosition = -128
+    let leftSceneDivider: CGFloat = 256
+    let centerSceneDivider: CGFloat = 512
+    let rightSceneDivider: CGFloat = 768
+    let velocityMultiplier = 40
+    
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "sliceBackground")
         background.position = CGPoint(x: 512, y: 384)
@@ -124,12 +130,14 @@ class GameScene: SKScene {
         let nodesAtPoint = nodes(at: location)
         
         for case let node as SKSpriteNode in nodesAtPoint {
-            if node.name == "enemy" {
+            if node.name == "enemy" || node.name == "fastEnemy" {
                 // destroy penguin
                 if let emitter = SKEmitterNode(fileNamed: "sliceHitEnemy") {
                     emitter.position = node.position
                     addChild(emitter)
                 }
+                
+                score += node.name == "enemy" ? 1 : 10
                 
                 node.name = ""
                 node.physicsBody?.isDynamic = false
@@ -140,8 +148,6 @@ class GameScene: SKScene {
                 
                 let seq = SKAction.sequence([group, .removeFromParent()])
                 node.run(seq)
-                
-                score += 1
                 
                 if let index = activeEnemies.firstIndex(of: node) {
                     activeEnemies.remove(at: index)
@@ -192,6 +198,11 @@ class GameScene: SKScene {
                 liveImage.texture = SKTexture(imageNamed: "sliceLifeGone")
             }
         }
+        
+        let gameOver = SKSpriteNode(imageNamed: "gameOver")
+        gameOver.position = CGPoint(x: 512, y: 384)
+        gameOver.zPosition = 2
+        addChild(gameOver)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -253,6 +264,7 @@ class GameScene: SKScene {
     
     func createEnemy(forceBomb: ForceBomb = .random) {
         let enemy: SKSpriteNode
+        var fastEnemy = false
         
         var enemyType = Int.random(in: 0...6)
         
@@ -287,37 +299,68 @@ class GameScene: SKScene {
                 emitter.position = CGPoint(x: 76, y: 64)
                 enemy.addChild(emitter)
             }
+        } else if enemyType == 6 {
+            fastEnemy = true
+            enemy = SKSpriteNode(imageNamed: "fastPenguin")
+            run(SKAction.playSoundFileNamed("launch.caf", waitForCompletion: false))
+            enemy.name = "fastEnemy"
         } else {
             enemy = SKSpriteNode(imageNamed: "penguin")
             run(SKAction.playSoundFileNamed("launch.caf", waitForCompletion: false))
             enemy.name = "enemy"
         }
         
-        let randomPosition = CGPoint(x: Int.random(in: 64...960), y: -128)
+        let randomPosition = CGPoint(x: Int.random(in: 64...960), y: startingYPosition)
         enemy.position = randomPosition
         
         let randomAngularVelocity = CGFloat.random(in: -3...3)
-        let randomXVelocity: Int
-        
-        if randomPosition.x < 256 {
-            randomXVelocity = Int.random(in: 8...15)
-        } else if randomPosition.x < 512 {
-            randomXVelocity = Int.random(in: 3...5)
-        } else if randomPosition.x < 768 {
-            randomXVelocity = -Int.random(in: 3...5)
-        } else {
-            randomXVelocity = -Int.random(in: 8...15)
-        }
-        
-        let randomYVelocity = Int.random(in: 24...32)
         
         enemy.physicsBody = SKPhysicsBody(circleOfRadius: 64)
-        enemy.physicsBody?.velocity = CGVector(dx: randomXVelocity * 40, dy: randomYVelocity * 40)
+        enemy.physicsBody?.velocity = randomVelocity(forFastEnemy: fastEnemy, at: randomPosition)
         enemy.physicsBody?.angularVelocity = randomAngularVelocity
         enemy.physicsBody?.collisionBitMask = 0
         
         addChild(enemy)
         activeEnemies.append(enemy)
+    }
+    
+    func randomVelocity(forFastEnemy fastEnemy: Bool, at position: CGPoint) -> CGVector {
+        let randomXVelocity: Int
+        
+        if position.x < leftSceneDivider {
+            if fastEnemy {
+                randomXVelocity = Int.random(in: 18...23)
+            } else {
+                randomXVelocity = Int.random(in: 8...15)
+            }
+        } else if position.x < centerSceneDivider {
+            if fastEnemy {
+                randomXVelocity = Int.random(in: 8...12)
+            } else {
+                randomXVelocity = Int.random(in: 3...5)
+            }
+        } else if position.x < rightSceneDivider {
+            if fastEnemy {
+                randomXVelocity = -Int.random(in: 8...12)
+            } else {
+                randomXVelocity = -Int.random(in: 3...5)
+            }
+        } else {
+            if fastEnemy {
+                randomXVelocity = -Int.random(in: 18...23)
+            } else {
+                randomXVelocity = -Int.random(in: 8...15)
+            }
+        }
+        
+        let randomYVelocity: Int
+        if fastEnemy{
+            randomYVelocity = Int.random(in: 35...42)
+        } else {
+            randomYVelocity = Int.random(in: 24...32)
+        }
+        
+        return CGVector(dx: randomXVelocity * velocityMultiplier, dy: randomYVelocity * velocityMultiplier)
     }
     
     func subtractLife() {
@@ -355,7 +398,7 @@ class GameScene: SKScene {
                         
                         node.removeFromParent()
                         activeEnemies.remove(at: index)
-                    } else if node.name == "bombContainer" {
+                    } else if node.name == "bombContainer" || node.name == "fastEnemy" {
                         node.name = ""
                         node.removeFromParent()
                         activeEnemies.remove(at: index)
