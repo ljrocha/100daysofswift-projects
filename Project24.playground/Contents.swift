@@ -76,7 +76,7 @@ import UIKit
 
 
 
-let string = "This is a test string"
+//let string = "This is a test string"
 
 //let attributes: [NSAttributedString.Key: Any] = [
 //    .foregroundColor: UIColor.white,
@@ -86,10 +86,44 @@ let string = "This is a test string"
 //
 //let attributedString = NSAttributedString(string: string, attributes: attributes)
 
-let attributedString = NSMutableAttributedString(string: string)
+//let attributedString = NSMutableAttributedString(string: string)
+//
+//attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 8), range: NSRange(location: 0, length: 4))
+//attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 16), range: NSRange(location: 5, length: 2))
+//attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 24), range: NSRange(location: 8, length: 1))
+//attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 32), range: NSRange(location: 10, length: 4))
+//attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 40), range: NSRange(location: 15, length: 6))
 
-attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 8), range: NSRange(location: 0, length: 4))
-attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 16), range: NSRange(location: 5, length: 2))
-attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 24), range: NSRange(location: 8, length: 1))
-attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 32), range: NSRange(location: 10, length: 4))
-attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 40), range: NSRange(location: 15, length: 6))
+// Challenges
+//
+//Challenge 1
+extension String {
+    func withPrefix(_ prefix: String) -> String {
+        if contains(prefix) { return self }
+        
+        return prefix + self
+    }
+}
+
+"pet".withPrefix("car")
+
+// Challenge 2
+extension String {
+    var isNumeric: Bool {
+        if let _ = Double(self) { return true }
+        return false
+    }
+}
+
+let numberString = "100"
+numberString.isNumeric
+
+// Challenge 3
+extension String {
+    var lines: [String] {
+        return components(separatedBy: "\n")
+    }
+}
+
+let str = "this\nis\na\ntest"
+str.lines
