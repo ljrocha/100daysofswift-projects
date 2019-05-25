@@ -24,6 +24,12 @@ class ViewController: UICollectionViewController, UINavigationControllerDelegate
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showConnectionPrompt))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(importPicture))
         
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let sendText = UIBarButtonItem(title: "Send text", style: .plain, target: self, action: #selector(sendTextMessage))
+        let showAllUsers = UIBarButtonItem(title: "Show all users", style: .plain, target: self, action: #selector(showUsers))
+        toolbarItems = [showAllUsers, flexibleSpace, sendText]
+        navigationController?.isToolbarHidden = false
+        
         mcSession = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
         mcSession?.delegate = self
     }
@@ -91,6 +97,44 @@ class ViewController: UICollectionViewController, UINavigationControllerDelegate
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
     }
+    
+    @objc func sendTextMessage() {
+        let ac = UIAlertController(title: "Enter text", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        
+        ac.addAction(UIAlertAction(title: "Send", style: .default) { [weak self, weak ac] _ in
+            guard let text = ac?.textFields?[0].text, text.count > 0 else { return }
+            self?.sendText(text)
+        })
+        
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(ac, animated: true)
+    }
+    
+    func sendText(_ text: String) {
+        guard let mcSession = mcSession else { return }
+        
+        if mcSession.connectedPeers.count > 0 {
+            let textData = Data(text.utf8)
+            do {
+                try mcSession.send(textData, toPeers: mcSession.connectedPeers, with: .reliable)
+            } catch {
+                let ac = UIAlertController(title: "Send error", message: error.localizedDescription, preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "OK", style: .default))
+                present(ac, animated: true)
+            }
+        }
+    }
+    
+    @objc func showUsers() {
+        guard let mcSession = mcSession else { return }
+        
+        let users = mcSession.connectedPeers.map { $0.displayName }.joined(separator: ", ")
+        let message = mcSession.connectedPeers.count > 0 ? users : "No devices connected"
+        let ac = UIAlertController(title: "Users currently connected:", message: message, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
 
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
         
@@ -120,6 +164,9 @@ class ViewController: UICollectionViewController, UINavigationControllerDelegate
             print("Connecting: \(peerID.displayName)")
         case .notConnected:
             print("Not Connected: \(peerID.displayName)")
+            let ac = UIAlertController(title: "User disconnected", message: "\(peerID.displayName) has disconnected", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
         @unknown default:
             print("Unknown state received: \(peerID.displayName)")
         }
@@ -130,6 +177,12 @@ class ViewController: UICollectionViewController, UINavigationControllerDelegate
             if let image = UIImage(data: data) {
                 self?.images.insert(image, at: 0)
                 self?.collectionView.reloadData()
+            } else {
+                let text = String(decoding: data, as: UTF8.self)
+                let ac = UIAlertController(title: "Text message received from \(peerID.displayName)", message: text, preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Got it!", style: .default))
+                self?.present(ac, animated: true)
+                
             }
         }
     }
