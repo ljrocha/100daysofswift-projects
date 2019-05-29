@@ -14,7 +14,8 @@
 		4628D9C62299DE150046AC4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4628D9C42299DE150046AC4C /* Main.storyboard */; };
 		4628D9C82299DE160046AC4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4628D9C72299DE160046AC4C /* Assets.xcassets */; };
 		4628D9CB2299DE160046AC4C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4628D9C92299DE160046AC4C /* LaunchScreen.storyboard */; };
-		4628D9D32299DF040046AC4C /* level1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4628D9D22299DF040046AC4C /* level1.txt */; };
+		4628D9D32299DF040046AC4C /* level0.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4628D9D22299DF040046AC4C /* level0.txt */; };
+		46ABB912229E4B50004890EF /* level1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 46ABB911229E4B50004890EF /* level1.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +28,8 @@
 		4628D9C72299DE160046AC4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4628D9CA2299DE160046AC4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4628D9CC2299DE160046AC4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4628D9D22299DF040046AC4C /* level1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level1.txt; sourceTree = "<group>"; };
+		4628D9D22299DF040046AC4C /* level0.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level0.txt; sourceTree = "<group>"; };
+		46ABB911229E4B50004890EF /* level1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level1.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +70,8 @@
 				4628D9C72299DE160046AC4C /* Assets.xcassets */,
 				4628D9C92299DE160046AC4C /* LaunchScreen.storyboard */,
 				4628D9CC2299DE160046AC4C /* Info.plist */,
-				4628D9D22299DF040046AC4C /* level1.txt */,
+				4628D9D22299DF040046AC4C /* level0.txt */,
+				46ABB911229E4B50004890EF /* level1.txt */,
 			);
 			path = Project26;
 			sourceTree = "<group>";
@@ -131,9 +134,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4628D9D32299DF040046AC4C /* level1.txt in Resources */,
+				4628D9D32299DF040046AC4C /* level0.txt in Resources */,
 				4628D9C62299DE150046AC4C /* Main.storyboard in Resources */,
 				4628D9BD2299DE150046AC4C /* GameScene.sks in Resources */,
+				46ABB912229E4B50004890EF /* level1.txt in Resources */,
 				4628D9C82299DE160046AC4C /* Assets.xcassets in Resources */,
 				4628D9CB2299DE160046AC4C /* LaunchScreen.storyboard in Resources */,
 			);
