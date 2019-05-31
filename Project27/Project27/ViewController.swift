@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     @IBAction func redrawTapped(_ sender: UIButton) {
         currentDrawType += 1
         
-        if currentDrawType > 5 {
+        if currentDrawType > 7 {
             currentDrawType = 0
         }
         
@@ -40,6 +40,10 @@ class ViewController: UIViewController {
             drawLines()
         case 5:
             drawImagesAndText()
+        case 6:
+            drawEmoji()
+        case 7:
+            drawText()
         default:
             break
         }
@@ -173,6 +177,82 @@ class ViewController: UIViewController {
             
             let mouse = UIImage(named: "mouse")
             mouse?.draw(at: CGPoint(x: 300, y: 150))
+        }
+        
+        imageView.image = image
+    }
+    
+    func drawEmoji() {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 512, height: 512))
+        
+        let image = renderer.image { ctx in
+            // Face
+            ctx.cgContext.setFillColor(UIColor.yellow.cgColor)
+            
+            let rectangle = CGRect(x: 0, y: 0, width: 512, height: 512).insetBy(dx: 5, dy: 5)
+            ctx.cgContext.addEllipse(in: rectangle)
+            
+            ctx.cgContext.drawPath(using: .fill)
+            
+            // Eyes
+            ctx.cgContext.setFillColor(UIColor.black.cgColor.copy(alpha: 0.7)!)
+            
+            let leftRectangle = CGRect(x: 128, y: 128, width: 64, height: 90)
+            ctx.cgContext.addEllipse(in: leftRectangle)
+            
+            let rightRectangle = CGRect(x: 320, y: 128, width: 64, height: 90)
+            ctx.cgContext.addEllipse(in: rightRectangle)
+            
+            ctx.cgContext.drawPath(using: .fillStroke)
+            
+            // Mouth
+            ctx.cgContext.setLineWidth(15)
+            ctx.cgContext.setLineCap(.round)
+            ctx.cgContext.setStrokeColor(UIColor.black.cgColor.copy(alpha: 0.7)!)
+            
+            ctx.cgContext.move(to: CGPoint(x: 128, y: 320))
+            ctx.cgContext.addLine(to: CGPoint(x: 384, y: 320))
+            
+            ctx.cgContext.drawPath(using: .stroke)
+        }
+        
+        imageView.image = image
+    }
+    
+    func drawText() {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 512, height: 512))
+        
+        let image = renderer.image { ctx in
+            // "T"
+            ctx.cgContext.move(to: CGPoint(x: 81, y: 128))
+            ctx.cgContext.addLine(to: CGPoint(x: 206, y: 128))
+            
+            ctx.cgContext.move(to: CGPoint(x: 143.5, y: 128))
+            ctx.cgContext.addLine(to: CGPoint(x: 143.5, y: 256))
+            
+            // "W"
+            ctx.cgContext.move(to: CGPoint(x: 210, y: 128))
+            ctx.cgContext.addLine(to: CGPoint(x: 241.25, y: 256))
+            
+            ctx.cgContext.addLine(to: CGPoint(x: 272.5, y: 128))
+            
+            ctx.cgContext.addLine(to: CGPoint(x: 303.75, y: 256))
+            
+            ctx.cgContext.addLine(to: CGPoint(x: 335, y: 128))
+            
+            // "I"
+            ctx.cgContext.move(to: CGPoint(x: 341, y: 128))
+            ctx.cgContext.addLine(to: CGPoint(x: 341, y: 256))
+            
+            // "N"
+            ctx.cgContext.move(to: CGPoint(x: 347, y: 256))
+            ctx.cgContext.addLine(to: CGPoint(x: 347, y: 128))
+            
+            ctx.cgContext.addLine(to: CGPoint(x: 447, y: 256))
+            
+            ctx.cgContext.addLine(to: CGPoint(x: 447, y: 128))
+            
+            ctx.cgContext.strokePath()
         }
         
         imageView.image = image
