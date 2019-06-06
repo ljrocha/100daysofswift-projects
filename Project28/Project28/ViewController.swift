@@ -13,10 +13,13 @@ class ViewController: UIViewController {
 
     @IBOutlet var secret: UITextView!
     
+    var doneBarButtonItem: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Nothing to see here"
+        doneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(saveSecretMessage))
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -35,10 +38,11 @@ class ViewController: UIViewController {
                 DispatchQueue.main.async {
                     if success {
                         self?.unlockSecretMessage()
-                    } else {
-                        let ac = UIAlertController(title: "Authentication failed", message: "You could not be verified; please try again.", preferredStyle: .alert)
-                        ac.addAction(UIAlertAction(title: "OK", style: .default))
-                        self?.present(ac, animated: true)
+                        if self?.passwordWasSet() == false {
+                            self?.setPassword()
+                        }
+                    } else if self?.passwordWasSet() == true {
+                            self?.requestPassword()
                     }
                 }
             }
@@ -70,6 +74,7 @@ class ViewController: UIViewController {
     func unlockSecretMessage() {
         secret.isHidden = false
         title = "Secret stuff!"
+        navigationItem.rightBarButtonItem = doneBarButtonItem
         
         secret.text = KeychainWrapper.standard.string(forKey: "SecretMessage")  ?? ""
     }
@@ -81,6 +86,49 @@ class ViewController: UIViewController {
         secret.resignFirstResponder()
         secret.isHidden = true
         title = "Nothing to see here"
+        navigationItem.rightBarButtonItem = nil
+    }
+    
+    func passwordWasSet() -> Bool {
+        return KeychainWrapper.standard.hasValue(forKey: "Password")
+    }
+    
+    func setPassword() {
+        let ac = UIAlertController(title: "Enter a password...", message: "The password will be used when biometric authentication fails.", preferredStyle: .alert)
+        ac.addTextField()
+        
+        ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak ac] _ in
+            guard let text = ac?.textFields?[0].text else { return }
+            
+            KeychainWrapper.standard.set(text, forKey: "Password")
+        })
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(ac, animated: true)
+    }
+    
+    func requestPassword() {
+        let ac = UIAlertController(title: "Enter password", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        
+        ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak ac] _ in
+            guard let text = ac?.textFields?[0].text else { return }
+            
+            if text == KeychainWrapper.standard.string(forKey: "Password") {
+                self?.unlockSecretMessage()
+            } else {
+                self?.wrongPasswordMessage()
+            }
+        })
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(ac, animated: true)
+    }
+    
+    func wrongPasswordMessage() {
+        let ac = UIAlertController(title: "Wrong password", message: "Please try again...", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+            self?.requestPassword()
+        })
+        present(ac, animated: true)
     }
 }
 
