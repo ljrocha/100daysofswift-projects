@@ -14,6 +14,25 @@ enum CollisionTypes: UInt32 {
     case player = 4
 }
 
+enum WindType: CaseIterable {
+    case none
+    case mild
+    case strong
+    
+    var windSpeed: CGVector {
+        switch self {
+        case .none:
+            return CGVector(dx: 0.0, dy: -9.8)
+        case .mild:
+            let dx = Bool.random() ? CGFloat.random(in: -5 ..< 0) : CGFloat.random(in: 0.1 ..< 5)
+            return CGVector(dx: dx, dy: -9.8)
+        case .strong:
+            let dx = Bool.random() ? CGFloat.random(in: -10 ..< -5) : CGFloat.random(in: 6 ... 10)
+            return CGVector(dx: dx, dy: -9.8)
+        }
+    }
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var buildings = [BuildingNode]()
@@ -180,16 +199,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.removeFromParent()
         banana.removeFromParent()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            let newGame = GameScene(size: self.size)
-            newGame.viewController = self.viewController
-            self.viewController.currentGame = newGame
-            
-            self.changePlayer()
-            newGame.currentPlayer = self.currentPlayer
-            
-            let transition = SKTransition.doorway(withDuration: 1.5)
-            self.view?.presentScene(newGame, transition: transition)
+        viewController.updateScore(by: 1, forPlayer: currentPlayer)
+        
+        if viewController.gameOver {
+            let gameOver = SKSpriteNode(imageNamed: "gameOver")
+            gameOver.position = CGPoint(x: 512, y: 384)
+            gameOver.zPosition = 1
+            addChild(gameOver)
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                let newGame = GameScene(size: self.size)
+                let windSpeed = WindType.allCases.randomElement()!.windSpeed
+                newGame.physicsWorld.gravity = windSpeed
+                self.viewController.updateWindSpeed(to: windSpeed.dx)
+                newGame.viewController = self.viewController
+                self.viewController.currentGame = newGame
+                
+                self.changePlayer()
+                newGame.currentPlayer = self.currentPlayer
+                
+                let transition = SKTransition.doorway(withDuration: 1.5)
+                self.view?.presentScene(newGame, transition: transition)
+            }
         }
     }
     

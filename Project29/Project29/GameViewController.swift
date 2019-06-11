@@ -18,14 +18,42 @@ class GameViewController: UIViewController {
     @IBOutlet var velocityLabel: UILabel!
     @IBOutlet var launchButton: UIButton!
     @IBOutlet var playerNumber: UILabel!
+    @IBOutlet var playerOne: UILabel!
+    @IBOutlet var playerTwo: UILabel!
+    @IBOutlet var windSpeed: UILabel!
     
     var currentGame: GameScene!
+    
+    var playerOneScore = 0 {
+        didSet {
+            playerOne.text = "Player One Score: \(playerOneScore)"
+        }
+    }
+    
+    var playerTwoScore = 0 {
+        didSet {
+            playerTwo.text = "Player Two Score: \(playerTwoScore)"
+        }
+    }
+    
+    var gameOver = false
 
+    let numberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         angleChanged(angleSlider)
         velocityChanged(velocitySlider)
+        
+        playerOneScore = 0
+        playerTwoScore = 0
+        updateWindSpeed(to: 0.0)
         
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
@@ -97,5 +125,40 @@ class GameViewController: UIViewController {
         velocityLabel.isHidden = false
         
         launchButton.isHidden = false
+    }
+    
+    func updateScore(by amount: Int, forPlayer player: Int) {
+        if player == 1 {
+            playerOneScore += amount
+        } else {
+            playerTwoScore += amount
+        }
+        
+        if playerOneScore >= 3 || playerTwoScore >= 3 {
+            gameOver = true
+            
+            angleSlider.isEnabled = false
+            angleLabel.isEnabled = false
+            
+            velocitySlider.isEnabled = false
+            velocityLabel.isEnabled = false
+            
+            launchButton.isEnabled = false
+            
+            playerNumber.isHidden = true
+        }
+    }
+    
+    func updateWindSpeed(to speed: CGFloat) {
+        switch speed {
+        case ..<0:
+            let currentSpeed = numberFormatter.string(from: abs(speed) as NSNumber)
+            windSpeed.text = "Westward wind speed\nof \(currentSpeed!)m/s squared)"
+        case 0:
+            windSpeed.text = "There is currently no wind"
+        default:
+            let currentSpeed = numberFormatter.string(from: speed as NSNumber)
+            windSpeed.text = "Eastward wind speed\nof \(currentSpeed!)m/s squared"
+        }
     }
 }
