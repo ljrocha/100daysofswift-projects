@@ -10,7 +10,7 @@ import UIKit
 
 class SelectionViewController: UITableViewController {
 	var items = [String]() // this is the array that will store the filenames to load
-	var viewControllers = [UIViewController]() // create a cache of the detail view controllers for faster loading
+    var images = [UIImage]()
 	var dirty = false
 
     override func viewDidLoad() {
@@ -25,13 +25,17 @@ class SelectionViewController: UITableViewController {
 		// load all the JPEGs into our array
 		let fm = FileManager.default
 
-		if let tempItems = try? fm.contentsOfDirectory(atPath: Bundle.main.resourcePath!) {
-			for item in tempItems {
-				if item.range(of: "Large") != nil {
-					items.append(item)
-				}
-			}
-		}
+        if let resourcePath = Bundle.main.resourcePath {
+            if let tempItems = try? fm.contentsOfDirectory(atPath: resourcePath) {
+                for item in tempItems {
+                    if item.range(of: "Large") != nil {
+                        items.append(item)
+                    }
+                }
+            }
+        }
+        
+        loadImages()
     }
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -42,6 +46,37 @@ class SelectionViewController: UITableViewController {
 			tableView.reloadData()
 		}
 	}
+    
+    func loadImages() {
+        for image in items {
+            let imageRootName = image.replacingOccurrences(of: "Large", with: "Thumb")
+            
+            guard let path = Bundle.main.path(forResource: imageRootName, ofType: nil) else {
+                fatalError("Could not find path for image: \(imageRootName)")
+            }
+            
+            guard let original = UIImage(contentsOfFile: path) else {
+                fatalError("Could not load contents of file: \(path)")
+            }
+            
+            let rendererRect = CGRect(origin: .zero, size: CGSize(width: 90, height: 90))
+            let renderer = UIGraphicsImageRenderer(size: rendererRect.size)
+            
+            let rounded = renderer.image { ctx in
+                //            ctx.cgContext.setShadow(offset: .zero, blur: 200, color: UIColor.black.cgColor)
+                //            ctx.cgContext.fillEllipse(in: CGRect(origin: .zero, size: original.size))
+                //            ctx.cgContext.setShadow(offset: .zero, blur: 0, color: nil)
+                
+                ctx.cgContext.addEllipse(in: rendererRect)
+                ctx.cgContext.clip()
+                
+                original.draw(in: rendererRect)
+            }
+            images.append(rounded)
+        }
+        
+        tableView.reloadData()
+    }
 
     // MARK: - Table view data source
 
@@ -52,7 +87,7 @@ class SelectionViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section.
-        return items.count * 10
+        return images.count * 10
     }
 
 
@@ -60,24 +95,10 @@ class SelectionViewController: UITableViewController {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
 		// find the image for this cell, and load its thumbnail
-		let currentImage = items[indexPath.row % items.count]
-		let imageRootName = currentImage.replacingOccurrences(of: "Large", with: "Thumb")
-		let path = Bundle.main.path(forResource: imageRootName, ofType: nil)!
-		let original = UIImage(contentsOfFile: path)!
-
+        let currentImage = items[indexPath.row % items.count]
+        let rounded = images[indexPath.row % items.count]
+        
         let rendererRect = CGRect(origin: .zero, size: CGSize(width: 90, height: 90))
-		let renderer = UIGraphicsImageRenderer(size: rendererRect.size)
-
-		let rounded = renderer.image { ctx in
-//            ctx.cgContext.setShadow(offset: .zero, blur: 200, color: UIColor.black.cgColor)
-//            ctx.cgContext.fillEllipse(in: CGRect(origin: .zero, size: original.size))
-//            ctx.cgContext.setShadow(offset: .zero, blur: 0, color: nil)
-            
-			ctx.cgContext.addEllipse(in: rendererRect)
-			ctx.cgContext.clip()
-
-			original.draw(in: rendererRect)
-		}
 
 		cell.imageView?.image = rounded
 
@@ -98,13 +119,12 @@ class SelectionViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let vc = ImageViewController()
 		vc.image = items[indexPath.row % items.count]
+        vc.loadedImage = images[indexPath.row % items.count]
 		vc.owner = self
 
 		// mark us as not needing a counter reload when we return
 		dirty = false
 
-		// add to our view controller cache and show
-		viewControllers.append(vc)
-		navigationController!.pushViewController(vc, animated: true)
+		navigationController?.pushViewController(vc, animated: true)
 	}
 }
