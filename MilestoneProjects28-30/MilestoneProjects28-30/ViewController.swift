@@ -9,18 +9,16 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
-    var backCards = [UIButton]()
-    var frontCards = [UIButton]()
+    var cards = [UIButton]()
     
     var capitalCities = [String: String]()
-    var frontCardTitles = [String]()
+    var cardTitles = [String]()
     
-    var previousFrontCard: UIButton?
+    var previousCard: UIButton?
     
     var cardPairsFound = 0 {
         didSet {
-            if cardPairsFound >= frontCards.count / 2 {
+            if cardPairsFound >= cards.count / 2 {
                 displayAllPairsFoundAlert()
             }
         }
@@ -53,26 +51,16 @@ class ViewController: UIViewController {
             for column in 0..<4 {
                 xOffset = column * (width + space)
                 
-                let frontCard = UIButton(type: .system)
-                frontCard.layer.cornerRadius = 4
-                frontCard.backgroundColor = .lightGray
-                frontCard.isUserInteractionEnabled = false
-                frontCard.isHidden = true
-                
-                let backCard = UIButton(type: .system)
-                backCard.layer.cornerRadius = 4
-                backCard.backgroundColor = .darkGray
-                backCard.addTarget(self, action: #selector(backCardTapped(_:)), for: .touchUpInside)
+                let card = UIButton(type: .system)
+                card.layer.cornerRadius = 4
+                card.backgroundColor = .darkGray
+                card.addTarget(self, action: #selector(backCardTapped(_:)), for: .touchUpInside)
                 
                 let frame = CGRect(x: xOffset, y: yOffset, width: width, height: height)
-                frontCard.frame = frame
-                backCard.frame = frame
+                card.frame = frame
                 
-                cardButtonsView.addSubview(frontCard)
-                cardButtonsView.addSubview(backCard)
-                
-                frontCards.append(frontCard)
-                backCards.append(backCard)
+                cardButtonsView.addSubview(card)
+                cards.append(card)
             }
         }
     }
@@ -91,48 +79,38 @@ class ViewController: UIViewController {
             "Spain": "Madrid"
         ]
         
-        frontCardTitles = Array(capitalCities.keys)
-        frontCardTitles.append(contentsOf: Array(capitalCities.values))
+        cardTitles = Array(capitalCities.keys) + Array(capitalCities.values)
         
         startNewGame()
     }
 
     @objc func backCardTapped(_ sender: UIButton) {
-        guard let senderIndex = backCards.firstIndex(of: sender) else { return }
+        flipCard(sender)
+        
+        if let previousCard = previousCard {
+            guard let previousCardTitle = previousCard.currentTitle else { return }
+            guard let currentCardTitle = sender.currentTitle else { return }
 
-        let currentFrontCard = frontCards[senderIndex]
-        
-        flipCard(currentFrontCard, underCard: sender)
-        
-        if let previousFrontCard = previousFrontCard {
-            guard let previousFrontCardTitle = previousFrontCard.currentTitle else { return }
-            guard let currentFrontCardTitle = currentFrontCard.currentTitle else { return }
-            
             view.isUserInteractionEnabled = false
-            
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                
-                if self.cardsMatch(previousFrontCardTitle, currentFrontCardTitle) {
+
+                if self.cardsMatch(previousCardTitle, currentCardTitle) {
                     self.cardPairsFound += 1
-                    
-                    UIView.animate(withDuration: 1.0) {
-                        previousFrontCard.isHidden = true
-                        currentFrontCard.isHidden = true
-                    }
+
+                    previousCard.isHidden = true
+                    sender.isHidden = true
                 } else {
-                    guard let previousFrontCardIndex = self.frontCards.firstIndex(of: previousFrontCard) else { return }
-                    let previousBackCard = self.backCards[previousFrontCardIndex]
-                    
-                    self.flipCard(previousFrontCard, underCard: previousBackCard, makeVisible: false)
-                    self.flipCard(currentFrontCard, underCard: sender, makeVisible: false)
+                    self.flipCard(previousCard, makeVisible: false)
+                    self.flipCard(sender, makeVisible: false)
                 }
-                
+
                 self.view.isUserInteractionEnabled = true
-                self.previousFrontCard = nil
+                self.previousCard = nil
             }
         } else {
-            previousFrontCard = currentFrontCard
+            previousCard = sender
         }
     }
     
@@ -155,38 +133,39 @@ class ViewController: UIViewController {
     }
     
     func startNewGame() {
-        frontCardTitles.shuffle()
+        cardTitles.shuffle()
         cardPairsFound = 0
         
-        for i in 0 ..< frontCards.count {
-            frontCards[i].setTitle(frontCardTitles[i], for: .normal)
+        self.cards.forEach {
+            $0.isHidden = false
+            
+            $0.setTitle(nil, for: .normal)
+            $0.backgroundColor = .darkGray
+            $0.isUserInteractionEnabled = true
         }
-        
-        self.frontCards.forEach { $0.isHidden = true }
-        self.backCards.forEach { $0.isHidden = false}
     }
     
-    func flipCard(_ frontCard: UIButton, underCard backCard: UIButton, makeVisible: Bool = true) {
+    func flipCard(_ card: UIButton, makeVisible: Bool = true) {
         let transitionOptions: UIView.AnimationOptions
         if makeVisible {
-            transitionOptions = [.transitionFlipFromLeft, .showHideTransitionViews]
+            transitionOptions = [.transitionFlipFromLeft]
         } else {
-            transitionOptions = [.transitionFlipFromRight, .showHideTransitionViews]
+            transitionOptions = [.transitionFlipFromRight]
         }
         
-        UIView.transition(with: backCard, duration: 1.0, options: transitionOptions, animations: {
+        UIView.transition(with: card, duration: 0.75, options: transitionOptions, animations: {
             if makeVisible {
-                backCard.isHidden = true
+                if let cardIndex = self.cards.firstIndex(of: card) {
+                    let cardTitle = self.cardTitles[cardIndex]
+                    
+                    card.setTitle(cardTitle, for: .normal)
+                    card.backgroundColor = .lightGray
+                    card.isUserInteractionEnabled = false
+                }
             } else {
-                backCard.isHidden = false
-            }
-        })
-        
-        UIView.transition(with: frontCard, duration: 1.0, options: transitionOptions, animations: {
-            if makeVisible {
-                frontCard.isHidden = false
-            } else {
-                frontCard.isHidden = true
+                card.setTitle(nil, for: .normal)
+                card.backgroundColor = .darkGray
+                card.isUserInteractionEnabled = true
             }
         })
     }
