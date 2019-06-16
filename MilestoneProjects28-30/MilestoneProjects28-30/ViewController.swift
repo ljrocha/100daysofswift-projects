@@ -10,16 +10,18 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var cardButtons = [UIButton]()
+    var backCards = [UIButton]()
+    var frontCards = [UIButton]()
+    
     var capitalCities = [String: String]()
+    var frontCardTitles = [String]()
     
-    var buttonTitles = [String]()
+    var previousFrontCard: UIButton?
     
-    var selectedCardButton: UIButton?
-    var pairsFound = 0 {
+    var cardPairsFound = 0 {
         didSet {
-            if pairsFound >= cardButtons.count / 2 {
-                showMessage()
+            if cardPairsFound >= frontCards.count / 2 {
+                displayAllPairsFoundAlert()
             }
         }
     }
@@ -28,15 +30,15 @@ class ViewController: UIViewController {
         view = UIView()
         view.backgroundColor = .white
         
-        let buttonsView = UIView()
-        buttonsView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(buttonsView)
+        let cardButtonsView = UIView()
+        cardButtonsView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(cardButtonsView)
         
         NSLayoutConstraint.activate([
-            buttonsView.widthAnchor.constraint(equalToConstant: 690),
-            buttonsView.heightAnchor.constraint(equalToConstant: 890),
-            buttonsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttonsView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            cardButtonsView.widthAnchor.constraint(equalToConstant: 690),
+            cardButtonsView.heightAnchor.constraint(equalToConstant: 890),
+            cardButtonsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            cardButtonsView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
             ])
         
         let width = 165
@@ -51,22 +53,27 @@ class ViewController: UIViewController {
             for column in 0..<4 {
                 xOffset = column * (width + space)
                 
-                let cardButton = UIButton(type: .system)
-                cardButton.layer.cornerRadius = 4
-                cardButton.layer.borderWidth = 1
-                cardButton.layer.borderColor = UIColor.lightGray.cgColor
-                cardButton.setTitleColor(.white, for: .normal)
+                let frontCard = UIButton(type: .system)
+                frontCard.layer.cornerRadius = 4
+                frontCard.backgroundColor = .lightGray
+                frontCard.isUserInteractionEnabled = false
+                frontCard.isHidden = true
                 
-                cardButton.addTarget(self, action: #selector(cardTapped(_:)), for: .touchUpInside)
+                let backCard = UIButton(type: .system)
+                backCard.layer.cornerRadius = 4
+                backCard.backgroundColor = .darkGray
+                backCard.addTarget(self, action: #selector(backCardTapped(_:)), for: .touchUpInside)
                 
                 let frame = CGRect(x: xOffset, y: yOffset, width: width, height: height)
-                cardButton.frame = frame
+                frontCard.frame = frame
+                backCard.frame = frame
                 
-                buttonsView.addSubview(cardButton)
-                cardButtons.append(cardButton)
+                cardButtonsView.addSubview(frontCard)
+                cardButtonsView.addSubview(backCard)
+                
+                frontCards.append(frontCard)
+                backCards.append(backCard)
             }
-            
-            xOffset = 0
         }
     }
     
@@ -84,40 +91,48 @@ class ViewController: UIViewController {
             "Spain": "Madrid"
         ]
         
-        buttonTitles = Array(capitalCities.keys)
-        buttonTitles.append(contentsOf: (Array(capitalCities.values)))
+        frontCardTitles = Array(capitalCities.keys)
+        frontCardTitles.append(contentsOf: Array(capitalCities.values))
         
         startNewGame()
     }
 
-    @objc func cardTapped(_ sender: UIButton) {
-        guard let senderTitle = sender.currentTitle else { return }
+    @objc func backCardTapped(_ sender: UIButton) {
+        guard let senderIndex = backCards.firstIndex(of: sender) else { return }
+
+        let currentFrontCard = frontCards[senderIndex]
         
-        sender.setTitleColor(.lightGray, for: .normal)
+        flipCard(currentFrontCard, underCard: sender)
         
-        if let selectedCardButton = selectedCardButton {
-            guard let selectedCardTitle = selectedCardButton.currentTitle else { return }
+        if let previousFrontCard = previousFrontCard {
+            guard let previousFrontCardTitle = previousFrontCard.currentTitle else { return }
+            guard let currentFrontCardTitle = currentFrontCard.currentTitle else { return }
             
             view.isUserInteractionEnabled = false
             
-            if cardsMatch(selectedCardTitle, senderTitle) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.pairsFound += 1
-                    selectedCardButton.isHidden = true
-                    sender.isHidden = true
-                    self.view.isUserInteractionEnabled = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                
+                if self.cardsMatch(previousFrontCardTitle, currentFrontCardTitle) {
+                    self.cardPairsFound += 1
+                    
+                    UIView.animate(withDuration: 1.0) {
+                        previousFrontCard.isHidden = true
+                        currentFrontCard.isHidden = true
+                    }
+                } else {
+                    guard let previousFrontCardIndex = self.frontCards.firstIndex(of: previousFrontCard) else { return }
+                    let previousBackCard = self.backCards[previousFrontCardIndex]
+                    
+                    self.flipCard(previousFrontCard, underCard: previousBackCard, makeVisible: false)
+                    self.flipCard(currentFrontCard, underCard: sender, makeVisible: false)
                 }
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    selectedCardButton.setTitleColor(.white, for: .normal)
-                    sender.setTitleColor(.white, for: .normal)
-                    self.view.isUserInteractionEnabled = true
-                }
+                
+                self.view.isUserInteractionEnabled = true
+                self.previousFrontCard = nil
             }
-            
-            self.selectedCardButton = nil
         } else {
-            selectedCardButton = sender
+            previousFrontCard = currentFrontCard
         }
     }
     
@@ -131,7 +146,7 @@ class ViewController: UIViewController {
         return false
     }
     
-    func showMessage() {
+    func displayAllPairsFoundAlert() {
         let ac = UIAlertController(title: "Congratulations!", message: "You found all the pairs!", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Try again!", style: .default) { [weak self] _ in
             self?.startNewGame()
@@ -140,17 +155,40 @@ class ViewController: UIViewController {
     }
     
     func startNewGame() {
-        buttonTitles.shuffle()
-        pairsFound = 0
+        frontCardTitles.shuffle()
+        cardPairsFound = 0
         
-        for i in 0 ..< cardButtons.count {
-            cardButtons[i].setTitle(buttonTitles[i], for: .normal)
-            cardButtons[i].setTitleColor(.white, for: .normal)
+        for i in 0 ..< frontCards.count {
+            frontCards[i].setTitle(frontCardTitles[i], for: .normal)
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            self?.cardButtons.forEach { $0.isHidden = false }
+        self.frontCards.forEach { $0.isHidden = true }
+        self.backCards.forEach { $0.isHidden = false}
+    }
+    
+    func flipCard(_ frontCard: UIButton, underCard backCard: UIButton, makeVisible: Bool = true) {
+        let transitionOptions: UIView.AnimationOptions
+        if makeVisible {
+            transitionOptions = [.transitionFlipFromLeft, .showHideTransitionViews]
+        } else {
+            transitionOptions = [.transitionFlipFromRight, .showHideTransitionViews]
         }
+        
+        UIView.transition(with: backCard, duration: 1.0, options: transitionOptions, animations: {
+            if makeVisible {
+                backCard.isHidden = true
+            } else {
+                backCard.isHidden = false
+            }
+        })
+        
+        UIView.transition(with: frontCard, duration: 1.0, options: transitionOptions, animations: {
+            if makeVisible {
+                frontCard.isHidden = false
+            } else {
+                frontCard.isHidden = true
+            }
+        })
     }
 }
 
