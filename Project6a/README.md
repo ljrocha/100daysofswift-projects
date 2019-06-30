@@ -4,7 +4,7 @@ A technique project covering Auto Layout. Part A is a copy of [project 2](../Pro
 
 ## Main Topics Covered
 
-- Creating Auto Layout constraints in Interface Builder.
+- Creating Auto Layout constraints in Interface Builder
 
 ## Challenges
 - [x] Try replacing the `widthAnchor` of the labels with `leadingAnchor` and `trailingAnchor` constraints, which more explicitly pin the label to the edges of its parent.
