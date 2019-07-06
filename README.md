@@ -5,8 +5,6 @@ Projects from my journey through [Paul Hudson's](https://www.twitter.com/twostra
 
 An app that shows a list of image names and displays the selected image in a new view controller.
 
-#### Main Topics Covered
-
 - Table Views
 - Image Views
 - App Bundle
@@ -21,8 +19,6 @@ An app that shows a list of image names and displays the selected image in a new
 
 A game that displays three random flags and asks players to select the one that belongs to a particular country.
 
-#### Main Topics Covered
-
 - Asset Catalog
 - UIButton
 - CALayer
@@ -34,8 +30,6 @@ A game that displays three random flags and asks players to select the one that 
 ## [Project 3](./Project3) - Social Media
 
 A technique project that allows users to share images with their friends.
-
-#### Main Topics Covered
 
 - UIBarButtonItem
 - UIActivityViewController
