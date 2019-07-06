@@ -4,9 +4,9 @@ A simple web browser app with restrictions to where the users can navigate.
 
 ## Main Topics Covered
 
-- WKWebView
-- UIToolbar
-- UIProgressView
+- `WKWebView`
+- `UIToolbar`
+- `UIProgressView`
 - Delegation
 - KVO (Key-value observing)
 - Creating views programmatically
