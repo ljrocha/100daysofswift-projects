@@ -75,3 +75,32 @@ A technique project covering Auto Layout. Part B covers adding Auto Layout const
 ## [Milestone Challenge](./MilestoneProjects4-6): Projects 4-6
 
 An app that allows users to create a shopping list. Items are added using an alert controller with a text field, and the entire list is shown in a table view.
+
+## [Project 7](./Project7) - White House Petitions
+
+An app that parses White House petitions. Data comes from the We the People API of the White House.
+
+- Data
+- Codable
+- UITabBarController
+- UIStoryboard
+
+## [Project 8](./Project8) - 7 Swifty Words
+
+A word-guessing game where players see a list of hints and an array of buttons with different letters on them, and need to use those buttons to enter words matching the hints.
+
+- Creating UI in code
+- Text alignment
+- Layout margins
+- UIFont
+
+## [Project9](./Project9) - Grand Central Dispatch
+
+A technique project that solves the problem in [project 7](./Project7) of the UI being locked up until all data is transferred.
+
+- `DispatchQueue`
+- `performSelector()`
+
+## [Milestone Challenge](./MilestoneProjects7-9): Projects 7-9
+
+A hangman game. The user makes one guess at a time and if the guess is correct, the letter they guessed will be shown in the word. If they guess 7 times incorrectly, they lose.
