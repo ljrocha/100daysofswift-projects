@@ -5,9 +5,9 @@ A word game that deals with anagrams.
 ## Main Topics Covered
 
 - Capture lists
-- UITextField
-- NSRange
-- UITextChecker
+- `UITextField`
+- `NSRange`
+- `UITextChecker`
 
 ## Challenges
 - [x] Disallow answers that are shorter than three letters or are just the start word.
