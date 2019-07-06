@@ -94,7 +94,7 @@ A word-guessing game where players see a list of hints and an array of buttons w
 - Layout margins
 - `UIFont`
 
-## [Project9](./Project9) - Grand Central Dispatch
+## [Project 9](./Project9) - Grand Central Dispatch
 
 A technique project that solves the problem in [project 7](./Project7) of the UI being locked up until all data is transferred.
 
@@ -104,3 +104,44 @@ A technique project that solves the problem in [project 7](./Project7) of the UI
 ## [Milestone Challenge](./MilestoneProjects7-9): Projects 7-9
 
 A hangman game. The user makes one guess at a time and if the guess is correct, the letter they guessed will be shown in the word. If they guess 7 times incorrectly, they lose.
+
+## [Project 10](./Project10) - Names to Faces
+
+An app that lets users put names to faces.
+
+- `UICollectionViewController`
+- `UICollectionView`
+- `UICollectionViewCell`
+- `UIImagePickerController`
+- `NSObject`
+- `Data`
+- `UUID`
+- `fatalError()`
+
+## [Project 11](./Project11) - Pachinko
+
+A `SpriteKit` game similar to Pachinko.
+
+- `SKSpriteNode`
+- `SKPhysicsBody`
+- `SKPhysicsContactDelegate`
+- `SKAction`
+- `SKLabelNode`
+- `SKEmitterNode`
+- `UITouch`
+
+## [Project 12](./Project12) User Defaults
+
+A technique project on `UserDefaults`. [Part A](./Project12a) demonstrates `NSCoding`. [Part B](./Project12b) demonstrates `Codable`.
+
+- `UserDefaults`
+- `NSCoding`
+- `NSKeyedArchiver`
+- `NSKeyedUnarchiver`
+- `Codable`
+- `JSONEncoder`
+- `JSONDecoder`
+
+## [Milestone Challenge](./MilestoneProjects10-12): Projects 10-12
+
+An app that lets users take photos and add captions to them, and then displays the photos in a table view. Tapping on a caption will display the picture in a new view controller. Photos are stored and then loaded on app launch.
