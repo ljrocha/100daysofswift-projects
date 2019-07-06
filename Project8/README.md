@@ -7,7 +7,7 @@ A word-guessing game where players see a list of hints and an array of buttons w
 - Creating UI in code
 - Text alignment
 - Layout margins
-- UIFont
+- `UIFont`
 
 ## Challenges
 - [x] Use the techniques you learned in [project 2](../Project2) to draw a thin gray line around the buttons view, to make it stand out from the rest of the UI.
