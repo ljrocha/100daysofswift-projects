@@ -38,3 +38,40 @@ A technique project that allows users to share images with their friends.
 ## [Milestone Challenge](./MilestoneProjects1-3): Projects 1-3
 
 An app that lists various world flags in a table view. When a row is tapped, a detail view controller displays the selected flag full size. Users have the ability to share the flag picture and country name.
+
+## [Project 4](./Project4) - Easy Browser
+
+A simple web browser app with restrictions to where the users can navigate.
+
+- WKWebView
+- UIToolbar
+- UIProgressView
+- Delegation
+- KVO (Key-value observing)
+- Creating views programmatically
+
+## [Project 5](./Project5) - Word Scramble
+
+A word game that deals with anagrams.
+
+- Capture lists
+- UITextField
+- NSRange
+- UITextChecker
+
+## [Project 6a](./Project6a) - Auto Layout
+
+A technique project covering Auto Layout. Part A is a copy of [project 2](./Project2) that uses Auto Layout.
+
+- Creating Auto Layout constraints in Interface Builder
+
+## [Project 6b](./Project6b) - Auto Layout
+
+A technique project covering Auto Layout. Part B covers adding Auto Layout constraints in code.
+
+- VFL (Visual Format Language)
+- Layout Anchors
+
+## [Milestone Challenge](./MilestoneProjects4-6): Projects 4-6
+
+An app that allows users to create a shopping list. Items are added using an alert controller with a text field, and the entire list is shown in a table view.
