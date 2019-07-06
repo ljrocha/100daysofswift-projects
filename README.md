@@ -20,19 +20,19 @@ An app that shows a list of image names and displays the selected image in a new
 A game that displays three random flags and asks players to select the one that belongs to a particular country.
 
 - Asset Catalog
-- UIButton
-- CALayer
-- UIColor
+- `UIButton`
+- `CALayer`
+- `UIColor`
 - Random Numbers
 - Actions
-- UIAlertController
+- `UIAlertController`
 
 ## [Project 3](./Project3) - Social Media
 
 A technique project that allows users to share images with their friends.
 
-- UIBarButtonItem
-- UIActivityViewController
+- `UIBarButtonItem`
+- `UIActivityViewController`
 - Info.plist
 
 ## [Milestone Challenge](./MilestoneProjects1-3): Projects 1-3
@@ -43,9 +43,9 @@ An app that lists various world flags in a table view. When a row is tapped, a d
 
 A simple web browser app with restrictions to where the users can navigate.
 
-- WKWebView
-- UIToolbar
-- UIProgressView
+- `WKWebView`
+- `UIToolbar`
+- `UIProgressView`
 - Delegation
 - KVO (Key-value observing)
 - Creating views programmatically
@@ -55,9 +55,9 @@ A simple web browser app with restrictions to where the users can navigate.
 A word game that deals with anagrams.
 
 - Capture lists
-- UITextField
-- NSRange
-- UITextChecker
+- `UITextField`
+- `NSRange`
+- `UITextChecker`
 
 ## [Project 6a](./Project6a) - Auto Layout
 
@@ -80,10 +80,10 @@ An app that allows users to create a shopping list. Items are added using an ale
 
 An app that parses White House petitions. Data comes from the We the People API of the White House.
 
-- Data
-- Codable
-- UITabBarController
-- UIStoryboard
+- `Data`
+- `Codable`
+- `UITabBarController`
+- `UIStoryboard`
 
 ## [Project 8](./Project8) - 7 Swifty Words
 
@@ -92,7 +92,7 @@ A word-guessing game where players see a list of hints and an array of buttons w
 - Creating UI in code
 - Text alignment
 - Layout margins
-- UIFont
+- `UIFont`
 
 ## [Project9](./Project9) - Grand Central Dispatch
 
