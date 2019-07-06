@@ -1,6 +1,6 @@
 # User Defaults
 
-A technique project on `UserDefaults`.
+A technique project on `UserDefaults`. [Part A](../Project12a) demonstrates `NSCoding`. [Part B](../Project12b) demonstrates `Codable`.
 
 ## Main Topics Covered
 
