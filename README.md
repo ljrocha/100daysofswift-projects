@@ -165,3 +165,12 @@ A whack-a-mole game that uses penguins.
 - `SKTexture`
 - `SKAction`
 - GCD
+
+## [Project 15](./Project15) - Animation
+
+A technique project focusing on animation.
+
+- Core Animation
+- `animate(withDuration:)`
+- `CGAffineTransform`
+- `alpha`
