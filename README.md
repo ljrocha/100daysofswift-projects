@@ -130,7 +130,7 @@ A `SpriteKit` game similar to Pachinko.
 - `SKEmitterNode`
 - `UITouch`
 
-## [Project 12](./Project12) User Defaults
+## [Project 12](./Project12) - User Defaults
 
 A technique project on `UserDefaults`. [Part A](./Project12a) demonstrates `NSCoding`. [Part B](./Project12b) demonstrates `Codable`.
 
@@ -145,3 +145,14 @@ A technique project on `UserDefaults`. [Part A](./Project12a) demonstrates `NSCo
 ## [Milestone Challenge](./MilestoneProjects10-12): Projects 10-12
 
 An app that lets users take photos and add captions to them, and then displays the photos in a table view. Tapping on a caption will display the picture in a new view controller. Photos are stored and then loaded on app launch.
+
+## [Project 13](./Project13) - Instafilter
+
+An app that lets users apply Core Image filters to pictures from their photo library and save those images back to their photo library.
+
+- Core Image
+- `CIContext`
+- `CIFilter`
+- `UISlider`
+- `UIImagePickerController`
+- `UIImageWriteToSavedPhotosAlbum()`
