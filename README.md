@@ -156,3 +156,12 @@ An app that lets users apply Core Image filters to pictures from their photo lib
 - `UISlider`
 - `UIImagePickerController`
 - `UIImageWriteToSavedPhotosAlbum()`
+
+## [Project 14](./Project14) - Whack-a-Penguin
+
+A whack-a-mole game that uses penguins.
+
+- `SKCropNode`
+- `SKTexture`
+- `SKAction`
+- GCD
