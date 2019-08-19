@@ -174,3 +174,7 @@ A technique project focusing on animation.
 - `animate(withDuration:)`
 - `CGAffineTransform`
 - `alpha`
+
+## [Milestone Challenge](./MilestoneProjects13-15): Projects 13-15
+
+An app that lists country names in a table view. When a country is selected, facts about the country are displayed.
