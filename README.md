@@ -178,3 +178,37 @@ A technique project focusing on animation.
 ## [Milestone Challenge](./MilestoneProjects13-15): Projects 13-15
 
 An app that lists country names in a table view. When a country is selected, facts about the country are displayed.
+
+
+## [Project 16](./Project16) - Capital Cities
+
+An app that shows locations of capital cities around the world, and when one of them is tapped you can bring up more information.
+
+- `MKMapView`
+- `MKAnnotation`
+- `MKPinAnnotationView`
+- `MKMapViewDelegate`
+- `CLLocationCoordinate2D`
+
+## [Project 17](./Project17) - Space Race
+
+A game about survival: the goal is to pilot a spaceship safely through a field of space junk. The longer you stay alive, the higher your score is.
+
+- Pixel-perfect collision detection
+- Advancing particle systems
+- `Timer`
+- `linearDamping`
+- `angularDamping`
+
+## [Project 18](./Project18) - Debugging
+
+A technique project where we look at different ways to identify problems in our code.
+
+- `print()`
+- `assert()`
+- Breakpoints
+- View debugging
+
+## [Milestone Challenge](./MilestoneProjects16-18): Projects 16-18
+
+A SpriteKit shooting gallery game. There are three rows of targets that slide across from one side to the other. When the user taps a target, the target fades out and they are awarded points.
