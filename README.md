@@ -212,3 +212,41 @@ A technique project where we look at different ways to identify problems in our 
 ## [Milestone Challenge](./MilestoneProjects16-18): Projects 16-18
 
 A SpriteKit shooting gallery game. There are three rows of targets that slide across from one side to the other. When the user taps a target, the target fades out and they are awarded points.
+
+## [Project 19](./Project19) - JavaScript Injection
+
+A Safari extension that lets users read the URL and page title they are currently visiting, and lets them type JavaScript and have it execute in Safari.
+
+- Extensions
+- `NSExtensionItem`
+- `NSItemProvider`
+- JavaScript
+- `UITextView`
+- `NotificationCenter`
+
+## [Project 20](./Project20) - Fireworks Night
+
+A SpriteKit game that lets players create fireworks displays using their fingers. Players need to touch or swipe fireworks of the same color, then shake their device to make them explode.
+
+- `UIBezierPath`
+- `SKAction.follow()`
+- `for case let`
+- Sprite color blending
+- Detecting shake gestures
+
+## [Project 21](./Project21) - Local Notifications
+
+A technique project on local notifications. 
+
+- `UNUserNotificationCenter`
+- Requesting permission for notifications
+- `UNMutableNotificationContent`
+- `UNNotificationSound`
+- Notification triggers
+- `UNNotificationRequest`
+- `UNNotificationAction`
+- `UNNotificationCategory`
+
+## [Milestone Challenge](./MilestoneProjects19-21): Projects 19-21
+
+Recreate the iOS Notes app. Notes are saved and users are able to share notes.
