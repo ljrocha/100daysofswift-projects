@@ -270,7 +270,7 @@ A Fruit Ninja-style game, where slicing penguins is good and slicing bombs is ba
 - `AVAudioPlayer`
 - `CaseIterable`
 
-## [Project 24](./Project24) - Swift Strings
+## [Project 24](./Project24.playground) - Swift Strings
 
 A technique project focusing on Swift strings.
 
@@ -278,7 +278,7 @@ A technique project focusing on Swift strings.
 - `NSAttributedString`
 - `NSMutableAttributedString`
 
-## [Milestone Challenge](./MilestoneProjects22-24): Projects 22-24
+## [Milestone Challenge](./MilestoneProjects22-24.playground): Projects 22-24
 
 Implement three Swift language extensions:
 - [x] Extend `UIView` so that it has a `bounceOut(duration:)` method that uses animation to scale its size down to 0.0001 over a specified number of seconds.
