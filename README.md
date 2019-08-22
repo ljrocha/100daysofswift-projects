@@ -250,3 +250,37 @@ A technique project on local notifications.
 ## [Milestone Challenge](./MilestoneProjects19-21): Projects 19-21
 
 Recreate the iOS Notes app. Notes are saved and users are able to share notes.
+
+## [Project 22](./Project22) - Detect-a-Beacon
+
+An app that allows users to detect and range beacons.
+
+- Core Location
+- `CLLocationManager`
+- `CLBeaconRegion`
+- `CLProximity`
+
+## [Project 23](./Project23) - Swifty Ninja
+
+A Fruit Ninja-style game, where slicing penguins is good and slicing bombs is bad.
+
+- `SKShapeNode`
+- `CGPath`
+- `touchesEnded()`
+- `AVAudioPlayer`
+- `CaseIterable`
+
+## [Project 24](./Project24) - Swift Strings
+
+A technique project focusing on Swift strings.
+
+- `contains()`
+- `NSAttributedString`
+- `NSMutableAttributedString`
+
+## [Milestone Challenge](./MilestoneProjects22-24): Projects 22-24
+
+Implement three Swift language extensions:
+- [x] Extend `UIView` so that it has a `bounceOut(duration:)` method that uses animation to scale its size down to 0.0001 over a specified number of seconds.
+- [x] Extend `Int` with a `times()` method that runs a closure as many times as the number is high.
+- [x] Extend `Array` so that it has a mutating `remove(item:)` method. If the item exists more than once, it should remove only the first instance it finds.
