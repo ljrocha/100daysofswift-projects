@@ -281,3 +281,36 @@ A technique project focusing on Swift strings.
 ## [Milestone Challenge](./MilestoneProjects22-24.playground): Projects 22-24
 
 Implement three Swift language extensions.
+
+## [Project 25](./Project25) - Selfie Share
+
+An app the lets users join sessions with others around them for the purpose of sharing photos. Users select the photos to share and they automatically get sent to nearby connected devices.
+
+- `UICollectionView`
+- `UIImagePickerController`
+- GCD
+- `MCSession`
+- `MCPeerID`
+- `MCAdvertiserAssistant`
+- `MCBrowserViewController`
+
+## [Project 26](./Project26) - Marble Maze
+
+A rolling ball game that uses the accelerometer to roll the ball while avoiding holes.
+
+- Core Motion
+- `CMMotionManager`
+- Loading a game level from a file
+- Physics bit masks
+- `SKPhysicsContactDelegate`
+
+## [Project 27](./Project27) - Core Graphics
+
+A technique project focusing on Core Graphics.
+
+- `UIGraphicsImageRenderer`
+- `UIGraphicsImageRendererContext`
+
+## [Milestone Challenge](./MilestoneProjects25-27): Projects 25-27
+
+An app that lets users create memes and then share them.
