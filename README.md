@@ -334,7 +334,7 @@ A game that puts two players against each other, both standing on high-rise buil
 - Texture atlases
 - Core Graphics
 
-## [Project 30](./Project30-files) - Instruments
+## [Project 30](./project30-files) - Instruments
 
 A technique project focusing on Instruments.
 
