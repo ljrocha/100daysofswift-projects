@@ -314,3 +314,32 @@ A technique project focusing on Core Graphics.
 ## [Milestone Challenge](./MilestoneProjects25-27): Projects 25-27
 
 An app that lets users create memes and then share them.
+
+## [Project 28](./Project28) - Secret Swift
+
+A secure text editor. Users can type anything they want and have it saved, but to read it again they must unlock the app using Touch ID or Face ID.
+
+- iOS Keychain
+- Local Authentication
+- Touch ID
+- Face ID
+
+## [Project 29](./Project29) - Exploding Monkeys
+
+A game that puts two players against each other, both standing on high-rise buildings, and both throwing exploding bananas at each other.
+
+- Destructible terrain
+- Connect UIKit and SpriteKit
+- Transition between scenes
+- Texture atlases
+- Core Graphics
+
+## [Project 30](./Project30-files) - Instruments
+
+A technique project focusing on Instruments.
+
+- Instruments
+
+## [Milestone Challenge](./MilestoneProjects28-30): Projects 28-30
+
+A memory pairs game where the goal is to find all pairs of cards.
