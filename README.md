@@ -1,6 +1,8 @@
 # 100 Days of Swift
 Projects with challenge solutions from my journey through [Paul Hudson's](https://www.twitter.com/twostraws) [100 Days Of Swift challenge](https://www.hackingwithswift.com/100).
 
+![Certificate of Distinction](./certificate.jpg)
+
 ## [Project 1](./Project1) - Storm Viewer
 
 An app that shows a list of image names and displays the selected image in a new view controller.
