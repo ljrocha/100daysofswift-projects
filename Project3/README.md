@@ -4,8 +4,8 @@ A technique project that allows users to share images with their friends.
 
 ## Main Topics Covered
 
-- UIBarButtonItem
-- UIActivityViewController
+- `UIBarButtonItem`
+- `UIActivityViewController`
 - Info.plist
 
 ## Challenges

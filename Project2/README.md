@@ -5,12 +5,12 @@ A game that displays three random flags and asks players to select the one that 
 ## Main Topics Covered
 
 - Asset Catalog
-- UIButton
-- CALayer
-- UIColor
+- `UIButton`
+- `CALayer`
+- `UIColor`
 - Random Numbers
 - Actions
-- UIAlertController
+- `UIAlertController`
 
 ## Challenges
 - [x] Show the player's score in the navigation bar, alongside the flag to guess.
